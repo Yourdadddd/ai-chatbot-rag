@@ -61,7 +61,8 @@ export const {
           return null;
         }
 
-        const adminEmails = process.env.ADMIN_EMAILS?.split(",").map((e) => e.trim()) ?? [];
+        const adminEmails =
+          process.env.ADMIN_EMAILS?.split(",").map((e) => e.trim()) ?? [];
         const isAdmin = adminEmails.includes(user.email);
         return { ...user, type: isAdmin ? "admin" : "regular" };
       },

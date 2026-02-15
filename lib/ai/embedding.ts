@@ -1,10 +1,10 @@
 import "server-only";
 
+import { MDocument } from "@mastra/rag";
 import { embed, embedMany } from "ai";
 import { cosineDistance, desc, gt, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { MDocument } from "@mastra/rag";
 import { embedding } from "../db/schema";
 
 // biome-ignore lint: Forbidden non-null assertion.
@@ -13,11 +13,9 @@ const db = drizzle(client);
 
 const embeddingModel = "openai/text-embedding-ada-002";
 
-export async function generateChunks(
-  input: string
-): Promise<string[]> {
+export async function generateChunks(input: string): Promise<string[]> {
   const doc = MDocument.fromMarkdown(input);
-  const chunks = await doc.chunk({
+  await doc.chunk({
     strategy: "markdown",
     headers: [
       ["#", "title"],
