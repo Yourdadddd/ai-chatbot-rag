@@ -622,9 +622,6 @@ export async function createResource({ content }: { content: string }) {
 
     return "Resource successfully created and embedded.";
   } catch (_error) {
-    throw new ChatSDKError(
-      "bad_request:database",
-      "Failed to create resource"
-    );
+    throw new ChatSDKError("bad_request:database", "Failed to create resource");
   }
 }

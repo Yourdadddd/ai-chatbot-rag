@@ -15,11 +15,7 @@ export const getKnowledge = tool({
     const queries = [question, ...similarQuestions];
     const results = await Promise.all(queries.map(findRelevantContent));
     const uniqueResults = Array.from(
-      new Map(
-        results
-          .flat()
-          .map((item) => [item?.name, item])
-      ).values()
+      new Map(results.flat().map((item) => [item?.name, item])).values()
     );
     return uniqueResults;
   },

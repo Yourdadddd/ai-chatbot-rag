@@ -16,6 +16,6 @@ export const addResource = ({ session }: { session: Session }) =>
       if (session.user.type !== "admin") {
         return "Error: Only admins can add resources to the knowledge base.";
       }
-      return createResource({ content });
+      return await createResource({ content });
     },
   });
