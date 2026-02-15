@@ -50,7 +50,7 @@ With the [AI SDK](https://ai-sdk.dev/docs/introduction), you can also switch to 
 
 You can deploy your own version of the Next.js AI Chatbot to Vercel with one click:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/templates/next.js/nextjs-ai-chatbot)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYourdadddd%2Fai-chatbot-rag&env=ADMIN_EMAILS&envDescription=Comma-separated%20list%20of%20admin%20email%20addresses%20who%20can%20add%20to%20the%20knowledge%20base&stores=%5B%7B%22type%22%3A%22postgres%22%7D%5D)
 
 ## Running locally
 
