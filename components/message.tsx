@@ -256,6 +256,70 @@ const PurePreviewMessage = ({
               );
             }
 
+            if (type === "tool-getKnowledge") {
+              const { toolCallId, state } = part;
+
+              return (
+                <Tool defaultOpen={false} key={toolCallId}>
+                  <ToolHeader state={state} type="tool-getKnowledge" />
+                  <ToolContent>
+                    {(state === "input-available" ||
+                      state === "input-streaming") && (
+                      <ToolInput input={part.input} />
+                    )}
+                    {state === "output-available" && (
+                      <ToolOutput
+                        errorText={undefined}
+                        output={
+                          <pre className="overflow-x-auto p-3 font-mono">
+                            {JSON.stringify(part.output, null, 2)}
+                          </pre>
+                        }
+                      />
+                    )}
+                    {state === "output-error" && (
+                      <ToolOutput
+                        errorText={part.errorText ?? "Search failed"}
+                        output={undefined}
+                      />
+                    )}
+                  </ToolContent>
+                </Tool>
+              );
+            }
+
+            if (type === "tool-addResource") {
+              const { toolCallId, state } = part;
+
+              return (
+                <Tool defaultOpen={false} key={toolCallId}>
+                  <ToolHeader state={state} type="tool-addResource" />
+                  <ToolContent>
+                    {(state === "input-available" ||
+                      state === "input-streaming") && (
+                      <ToolInput input={part.input} />
+                    )}
+                    {state === "output-available" && (
+                      <ToolOutput
+                        errorText={undefined}
+                        output={
+                          <pre className="overflow-x-auto p-3 font-mono">
+                            {JSON.stringify(part.output, null, 2)}
+                          </pre>
+                        }
+                      />
+                    )}
+                    {state === "output-error" && (
+                      <ToolOutput
+                        errorText={part.errorText ?? "Failed to add resource"}
+                        output={undefined}
+                      />
+                    )}
+                  </ToolContent>
+                </Tool>
+              );
+            }
+
             if (type === "tool-createDocument") {
               const { toolCallId } = part;
 
