@@ -210,30 +210,68 @@ function PureMultimodalInput({
     }
   }, []);
 
+  const readTextFile = useCallback(
+    (file: File): Promise<string> =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsText(file);
+      }),
+    []
+  );
+
+  const isTextFile = useCallback((file: File) => {
+    const ext = file.name.split(".").pop()?.toLowerCase();
+    return ext === "md" || ext === "txt" || ext === "markdown";
+  }, []);
+
   const handleFileChange = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(event.target.files || []);
 
-      setUploadQueue(files.map((file) => file.name));
+      const textFiles = files.filter((f) => isTextFile(f));
+      const imageFiles = files.filter((f) => !isTextFile(f));
 
-      try {
-        const uploadPromises = files.map((file) => uploadFile(file));
-        const uploadedAttachments = await Promise.all(uploadPromises);
-        const successfullyUploadedAttachments = uploadedAttachments.filter(
-          (attachment) => attachment !== undefined
-        );
+      if (textFiles.length > 0) {
+        try {
+          const contents = await Promise.all(
+            textFiles.map((f) => readTextFile(f))
+          );
+          const combined = contents.join("\n\n");
+          setInput(
+            `Please add the following to the knowledge base:\n\n${combined}`
+          );
+          toast.success(
+            `Loaded ${textFiles.map((f) => f.name).join(", ")} into chat input`
+          );
+        } catch (_error) {
+          toast.error("Failed to read text file");
+        }
+      }
 
-        setAttachments((currentAttachments) => [
-          ...currentAttachments,
-          ...successfullyUploadedAttachments,
-        ]);
-      } catch (error) {
-        console.error("Error uploading files!", error);
-      } finally {
-        setUploadQueue([]);
+      if (imageFiles.length > 0) {
+        setUploadQueue(imageFiles.map((file) => file.name));
+
+        try {
+          const uploadPromises = imageFiles.map((file) => uploadFile(file));
+          const uploadedAttachments = await Promise.all(uploadPromises);
+          const successfullyUploadedAttachments = uploadedAttachments.filter(
+            (attachment) => attachment !== undefined
+          );
+
+          setAttachments((currentAttachments) => [
+            ...currentAttachments,
+            ...successfullyUploadedAttachments,
+          ]);
+        } catch (error) {
+          console.error("Error uploading files!", error);
+        } finally {
+          setUploadQueue([]);
+        }
       }
     },
-    [setAttachments, uploadFile]
+    [setAttachments, uploadFile, isTextFile, readTextFile, setInput]
   );
 
   const handlePaste = useCallback(
