@@ -1,7 +1,9 @@
 import type { InferUITool, UIMessage } from "ai";
 import { z } from "zod";
 import type { ArtifactKind } from "@/components/artifact";
+import type { addResource } from "./ai/tools/add-resource";
 import type { createDocument } from "./ai/tools/create-document";
+import type { getKnowledge } from "./ai/tools/get-knowledge";
 import type { getWeather } from "./ai/tools/get-weather";
 import type { requestSuggestions } from "./ai/tools/request-suggestions";
 import type { updateDocument } from "./ai/tools/update-document";
@@ -16,6 +18,8 @@ export const messageMetadataSchema = z.object({
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
 
 type weatherTool = InferUITool<typeof getWeather>;
+type getKnowledgeTool = InferUITool<typeof getKnowledge>;
+type addResourceTool = InferUITool<ReturnType<typeof addResource>>;
 type createDocumentTool = InferUITool<ReturnType<typeof createDocument>>;
 type updateDocumentTool = InferUITool<ReturnType<typeof updateDocument>>;
 type requestSuggestionsTool = InferUITool<
@@ -24,6 +28,8 @@ type requestSuggestionsTool = InferUITool<
 
 export type ChatTools = {
   getWeather: weatherTool;
+  getKnowledge: getKnowledgeTool;
+  addResource: addResourceTool;
   createDocument: createDocumentTool;
   updateDocument: updateDocumentTool;
   requestSuggestions: requestSuggestionsTool;
